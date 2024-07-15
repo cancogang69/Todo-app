@@ -8,7 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
@@ -17,11 +17,23 @@ public class User {
   @Column(nullable = false)
   private String name;
 
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private String email;
 
   @Column(nullable = false)
   private String password;
+
+  public User() {
+    this.name = "test";
+    this.email = "test@test.com";
+    this.password = "test";
+  }
+
+  public User(String name, String email, String password) {
+    this.name = name;
+    this.email = email;
+    this.password = password;
+  }
 
   public String getName() {
     return this.name;
