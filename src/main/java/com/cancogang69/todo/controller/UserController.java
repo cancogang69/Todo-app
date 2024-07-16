@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 
 
@@ -35,7 +37,7 @@ public class UserController {
   }
   
   @PostMapping(path = "/create")
-  public boolean postMethodName(@RequestBody User newUser) {
+  public boolean createUser(@RequestBody User newUser) {
     if(this.userService.isEmailTaken(newUser.getEmail())) {
       System.out.println("This email is taken by someone!");
       return false;
@@ -59,5 +61,15 @@ public class UserController {
 
     return "Login successful";
   }
-  
+
+  @PutMapping(path = "/update/email/{user_id}")
+  public String updateEmail(@PathVariable Integer user_id, @RequestParam String email) {
+    Optional<User> update_user = this.userService.updateEmail(user_id, email);
+    if(update_user.isPresent()) {
+      return "Update email successful!";
+    }
+    else {
+      return "Email has already been taken!";
+    }
+  }
 }

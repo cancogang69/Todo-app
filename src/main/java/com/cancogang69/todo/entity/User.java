@@ -35,6 +35,10 @@ public class User {
     this.password = password;
   }
 
+  public Integer getId() {
+    return this.id;
+  }
+
   public String getName() {
     return this.name;
   }

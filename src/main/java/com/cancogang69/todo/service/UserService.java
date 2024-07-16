@@ -35,4 +35,16 @@ public class UserService {
   public User saveUser(User newUser) {
     return this.userRepo.save(newUser);
   }
+
+  public Optional<User> updateEmail(Integer user_id, String update_email) {
+    Optional<User> existing_user = this.findUserById(user_id);
+    if(existing_user.isEmpty() || this.isEmailTaken(update_email)) {
+      return Optional.empty();
+    } 
+
+    User update_user = existing_user.get();
+    update_user.setEmail(update_email);
+    existing_user = Optional.of(this.userRepo.save(update_user));
+    return existing_user;
+  }
 }
