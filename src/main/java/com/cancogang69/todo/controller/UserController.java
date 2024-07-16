@@ -83,4 +83,16 @@ public class UserController {
       return "Cannot find user!";
     }
   }
+
+  @PutMapping(path = "update/information/{user_id}")
+  public String updateInformation(@PathVariable Integer user_id, @RequestBody User update_user) {
+    Optional<User> respone_user = this.userService.updateInformation(user_id, update_user);
+
+    if(respone_user.isPresent()) {
+      return "Update user's information successful!";
+    }
+    else {
+      return "Cannot update user's information!";
+    }
+  }
 }

@@ -59,4 +59,23 @@ public class UserService {
     existing_user = Optional.of(this.userRepo.save(update_user));
     return existing_user;
   }
+
+  private boolean isAuthCorrect(User existing_user, User stranger) {
+    return (existing_user.getEmail().equals(stranger.getEmail()) &&
+            existing_user.getPassword().equals(stranger.getPassword()));
+  }
+
+  public Optional<User> updateInformation(Integer user_id, User update_user) {
+    Optional<User> existing_user = this.findUserById(user_id);
+    System.out.println(existing_user.get().getEmail() + " " + existing_user.get().getPassword());
+    System.out.println(update_user.getEmail() + " " + update_user.getPassword());
+    if(existing_user.isEmpty() || !isAuthCorrect(existing_user.get(), update_user)) {
+      return Optional.empty();
+    }
+
+    User temp_user = existing_user.get();
+    temp_user.setName(update_user.getName());
+    existing_user = Optional.of(this.userRepo.save(temp_user));
+    return existing_user;
+  }
 }
