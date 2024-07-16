@@ -47,4 +47,16 @@ public class UserService {
     existing_user = Optional.of(this.userRepo.save(update_user));
     return existing_user;
   }
+
+  public Optional<User> updatePassword(Integer user_id, String update_password) {
+    Optional<User> existing_user = this.findUserById(user_id);
+    if(existing_user.isEmpty()) {
+      return Optional.empty();
+    }
+
+    User update_user = existing_user.get();
+    update_user.setPassword(update_password);
+    existing_user = Optional.of(this.userRepo.save(update_user));
+    return existing_user;
+  }
 }

@@ -72,4 +72,15 @@ public class UserController {
       return "Email has already been taken!";
     }
   }
+
+  @PutMapping(path = "/update/password/{user_id}")
+  public String updatePassword(@PathVariable Integer user_id, @RequestParam String password) {
+    Optional<User> update_user = this.userService.updatePassword(user_id, password);
+    if(update_user.isPresent()) {
+      return "Update email successful!";
+    }
+    else {
+      return "Cannot find user!";
+    }
+  }
 }
