@@ -23,7 +23,10 @@ services:
     environment:
       PGADMIN_DEFAULT_EMAIL: admin@admin.com
       PGADMIN_DEFAULT_PASSWORD: r00t
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
     restart: unless-stopped
 
 volumes:
   postgres-data:
+  pgadmin-data:
