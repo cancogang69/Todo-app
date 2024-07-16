@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -84,7 +85,7 @@ public class UserController {
     }
   }
 
-  @PutMapping(path = "update/information/{user_id}")
+  @PutMapping(path = "/update/information/{user_id}")
   public String updateInformation(@PathVariable Integer user_id, @RequestBody User update_user) {
     Optional<User> respone_user = this.userService.updateInformation(user_id, update_user);
 
@@ -93,6 +94,18 @@ public class UserController {
     }
     else {
       return "Cannot update user's information!";
+    }
+  }
+
+  @DeleteMapping(path = "/delete/{user_id}")
+  public String deleteUser(@PathVariable Integer user_id, @RequestBody User user) {
+    boolean isDeleteUserSuccessful = this.userService.deleteUser(user_id, user);
+
+    if(isDeleteUserSuccessful) {
+      return "Delete account successful!";
+    }
+    else {
+      return "Cannot delete account!";
     }
   }
 }

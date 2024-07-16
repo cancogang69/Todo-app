@@ -67,8 +67,6 @@ public class UserService {
 
   public Optional<User> updateInformation(Integer user_id, User update_user) {
     Optional<User> existing_user = this.findUserById(user_id);
-    System.out.println(existing_user.get().getEmail() + " " + existing_user.get().getPassword());
-    System.out.println(update_user.getEmail() + " " + update_user.getPassword());
     if(existing_user.isEmpty() || !isAuthCorrect(existing_user.get(), update_user)) {
       return Optional.empty();
     }
@@ -77,5 +75,15 @@ public class UserService {
     temp_user.setName(update_user.getName());
     existing_user = Optional.of(this.userRepo.save(temp_user));
     return existing_user;
+  }
+
+  public boolean deleteUser(Integer user_id, User user) {
+    Optional<User> existing_user = this.findUserById(user_id);
+    if(existing_user.isEmpty() || !isAuthCorrect(existing_user.get(), user)) {
+      return false;
+    }
+
+    this.userRepo.deleteById(user_id);
+    return true;
   }
 }
