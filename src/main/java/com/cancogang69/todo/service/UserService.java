@@ -28,6 +28,10 @@ public class UserService {
     return !(someone == null);
   }
 
+  public User findUserByEmailAndPassword(String email, String password) {
+    return this.userRepo.findUserByEmailAndPassword(email, password);
+  }
+
   public User saveUser(User newUser) {
     return this.userRepo.save(newUser);
   }

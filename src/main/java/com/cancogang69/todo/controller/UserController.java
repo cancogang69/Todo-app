@@ -45,4 +45,19 @@ public class UserController {
 
     return true;
   } 
+
+  @GetMapping(path = "/login")
+  public String login(@RequestParam String email, @RequestParam String password) {
+    if(!this.userService.isEmailTaken(email)) {
+      return "Email doesn't exist!";
+    }
+
+    User someone = this.userService.findUserByEmailAndPassword(email, password);
+    if(someone == null) {
+      return "Password is incorrect!";
+    }
+
+    return "Login successful";
+  }
+  
 }
