@@ -87,6 +87,8 @@ public class PlanController {
         return "This plan doesn't exist";
       case 2:
         return "This user doesn't own this plan!";
+      case 3:
+        return "Some issue happen when saving update information!";
       default:
         return "Update plan succesful!";
     }
