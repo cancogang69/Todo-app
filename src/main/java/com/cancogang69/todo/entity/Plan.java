@@ -53,4 +53,8 @@ public class Plan {
   public void setOwner(User owner) {
     this.owner = owner;
   }
+
+  public Integer getOwnerId() {
+    return this.owner.getId();
+  }
 }

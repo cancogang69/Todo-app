@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -67,6 +69,26 @@ public class PlanController {
     }
     else {
       return "Cannot create plan!";
+    }
+  }
+
+  @PutMapping("/update/{plan_id}")
+  public String updatePlanInformation(@PathVariable Integer plan_id, @RequestParam String email, 
+                  @RequestBody Plan updatePlan) {
+
+    Optional<User> owner = this.userService.findUserByEmail(email);
+    if(owner.isEmpty()) {
+      return "This user isn't exist!";
+    }
+
+    int status = this.planService.updatePlanInformation(plan_id, owner.get(), updatePlan);
+    switch (status) {
+      case 1:
+        return "This plan doesn't exist";
+      case 2:
+        return "This user doesn't own this plan!";
+      default:
+        return "Update plan succesful!";
     }
   }
 }
