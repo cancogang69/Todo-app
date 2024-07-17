@@ -39,7 +39,7 @@ public class UserController {
   
   @PostMapping(path = "/create")
   public boolean createUser(@RequestBody User newUser) {
-    if(this.userService.isEmailTaken(newUser.getEmail())) {
+    if(this.userService.findUserByEmail(newUser.getEmail()).isPresent()) {
       System.out.println("This email is taken by someone!");
       return false;
     }
@@ -51,7 +51,7 @@ public class UserController {
 
   @GetMapping(path = "/login")
   public String login(@RequestParam String email, @RequestParam String password) {
-    if(!this.userService.isEmailTaken(email)) {
+    if(this.userService.findUserByEmail(email).isEmpty()) {
       return "Email doesn't exist!";
     }
 

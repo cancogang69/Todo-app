@@ -23,9 +23,9 @@ public class UserService {
     return this.userRepo.findById(id);
   }
 
-  public boolean isEmailTaken(String email) {
+  public Optional<User> findUserByEmail(String email) {
     User someone = this.userRepo.findUserByEmail(email);
-    return !(someone == null);
+    return Optional.ofNullable(someone);
   }
 
   public User findUserByEmailAndPassword(String email, String password) {
@@ -38,7 +38,7 @@ public class UserService {
 
   public Optional<User> updateEmail(Integer user_id, String update_email) {
     Optional<User> existing_user = this.findUserById(user_id);
-    if(existing_user.isEmpty() || this.isEmailTaken(update_email)) {
+    if(existing_user.isEmpty() || this.findUserByEmail(update_email).isPresent()) {
       return Optional.empty();
     } 
 
