@@ -23,6 +23,10 @@ public class PlanService {
     return this.planRepo.findById(id);
   }
 
+  public List<Plan> findByOwnerId(Integer id) {
+    return this.planRepo.findByOwnerId(id);
+  }
+
   public boolean createPlan(Plan newPlan) {
     newPlan = this.planRepo.save(newPlan);
     return (newPlan != null);

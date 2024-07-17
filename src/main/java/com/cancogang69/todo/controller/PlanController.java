@@ -40,6 +40,18 @@ public class PlanController {
     return this.planService.findById(plan_id);
   }
 
+  @GetMapping(path = "/find/owner/{email}")
+  public List<Plan> getPlanByOwnerId(@PathVariable String email) {
+    Optional<User> owner = this.userService.findUserByEmail(email);
+    if(owner.isEmpty()) {
+      return List.of();
+    }
+
+    Integer owner_id = owner.get().getId();
+    return this.planService.findByOwnerId(owner_id);
+  }
+  
+
   @PostMapping(path = "/create")
   public String createPlan(@RequestBody Plan newPlan, @RequestParam String email) {
     Optional<User> owner = this.userService.findUserByEmail(email);
@@ -49,7 +61,7 @@ public class PlanController {
 
     newPlan.setOwner(owner.get());
     boolean isCreateSuccessful = this.planService.createPlan(newPlan);
-    
+
     if(isCreateSuccessful) {
       return "Create plan successfully!";
     }
