@@ -12,6 +12,7 @@ import com.cancogang69.todo.service.UserService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -91,6 +92,24 @@ public class PlanController {
         return "Some issue happen when saving update information!";
       default:
         return "Update plan succesful!";
+    }
+  }
+
+  @DeleteMapping(path = "/delete/{plan_id}")
+  public String deletePlan(@PathVariable Integer plan_id, @RequestParam String email) {
+    Optional<User> owner = this.userService.findUserByEmail(email);
+    if(owner.isEmpty()) {
+      return "This user isn't exist!";
+    }
+
+    int status = this.planService.deletePlan(plan_id, owner.get());
+    switch (status) {
+      case 1:
+        return "This plan doesn't exist";
+      case 2:
+        return "This user doesn't own this plan!";
+      default:
+        return "Delete plan succesful!";
     }
   }
 }

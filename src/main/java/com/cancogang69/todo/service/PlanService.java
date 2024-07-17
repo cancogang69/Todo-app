@@ -55,4 +55,19 @@ public class PlanService {
       return 3;
     }
   }
+
+  public int deletePlan(Integer plan_id, User owner) {
+    Optional<Plan> plan = this.findById(plan_id);
+    if(plan.isEmpty()) {
+      return 1;
+    }
+
+    Plan existing_plan = plan.get();
+    if(existing_plan.getOwnerId() != owner.getId()) {
+      return 2;
+    }
+    
+    this.planRepo.delete(existing_plan);
+    return 0;
+  }
 }
