@@ -39,6 +39,10 @@ public class Task {
     this.plan = plan;
   }
 
+  public Integer getId() {
+    return this.id;
+  }
+
   public String getDescription() {
     return this.description;
   }
