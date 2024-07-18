@@ -7,6 +7,7 @@ import com.cancogang69.todo.service.PlanService;
 import com.cancogang69.todo.service.TaskService;
 import com.cancogang69.todo.entity.Plan;
 import com.cancogang69.todo.entity.Task;
+import com.cancogang69.todo.enums.TaskStatus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 
@@ -50,7 +53,6 @@ public class TaskController {
     return taskService.getByPlanId(plan_id);
   }
   
-  
   @PostMapping(path = "/create")
   public String postMethodName(@RequestBody Task task, @RequestParam Integer plan_id) {
     Optional<Plan> plan = planService.findById(plan_id);
@@ -63,5 +65,16 @@ public class TaskController {
     return "Create task successfully!";
   }
   
+  @PutMapping(path = "/update/status/{task_id}")
+  public String updateTaskStatus(@PathVariable Integer task_id, @RequestParam TaskStatus status) {
+    boolean isUpdateStatusSuccessful = taskService.updateTaskStatus(task_id, status);
+    
+    if(isUpdateStatusSuccessful) {
+      return "Update task status successfully!";
+    }
+    else {
+      return "This task doesn't exist!";
+    }
+  }
 
 }
