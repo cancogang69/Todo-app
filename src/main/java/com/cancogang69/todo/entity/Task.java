@@ -29,7 +29,9 @@ public class Task {
   @JoinColumn(name = "plan_id", referencedColumnName = "id", nullable = false)
   private Plan plan;
 
-  public Task() { }
+  public Task() { 
+    this.status = TaskStatus.INITIAL;
+  }
 
   public Task(String description, Plan plan) {
     this.description = description;
