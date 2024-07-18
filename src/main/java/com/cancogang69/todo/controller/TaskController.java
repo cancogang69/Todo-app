@@ -44,6 +44,12 @@ public class TaskController {
       return null;
     }
   }
+
+  @GetMapping(path = "/find/owner/{plan_id}")
+  public List<Task> getAllTaskByPlanId(@PathVariable Integer plan_id) {
+    return taskService.getByPlanId(plan_id);
+  }
+  
   
   @PostMapping(path = "/create")
   public String postMethodName(@RequestBody Task task, @RequestParam Integer plan_id) {

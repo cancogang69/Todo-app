@@ -24,6 +24,10 @@ public class TaskService {
     return taskRepo.findById(id);
   }
 
+  public List<Task> getByPlanId(Integer plan_id) {
+    return taskRepo.findAllTaskByPlanId(plan_id);
+  }
+
   public int createTask(Plan plan, Task task) {
     task.setPlan(plan);
     taskRepo.save(task);
