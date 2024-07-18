@@ -46,4 +46,14 @@ public class TaskService {
     taskRepo.save(existing_task);
     return true;
   }
+
+  public boolean deleteTask(Integer task_id) {
+    Optional<Task> task = getById(task_id);
+    if(task.isEmpty()) {
+      return false;
+    }
+
+    taskRepo.delete(task.get());
+    return true;
+  }
 }
