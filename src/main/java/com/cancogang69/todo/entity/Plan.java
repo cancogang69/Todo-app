@@ -24,11 +24,11 @@ public class Plan {
 
   @ManyToOne
   @JoinColumn(name = "owner_id", referencedColumnName = "id", nullable = false)
-  private User owner; 
+  private Account owner; 
 
   public Plan() { }
 
-  public Plan(String name, String description, User owner) {
+  public Plan(String name, String description, Account owner) {
     this.name = name;
     this.description = description;
     this.owner = owner;
@@ -50,7 +50,7 @@ public class Plan {
     this.description = description;
   }
 
-  public void setOwner(User owner) {
+  public void setOwner(Account owner) {
     this.owner = owner;
   }
 

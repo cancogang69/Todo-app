@@ -6,9 +6,9 @@ import java.util.Optional;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cancogang69.todo.entity.Plan;
-import com.cancogang69.todo.entity.User;
+import com.cancogang69.todo.entity.Account;
 import com.cancogang69.todo.service.PlanService;
-import com.cancogang69.todo.service.UserService;
+import com.cancogang69.todo.service.AccountService;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class PlanController {
 
   @Autowired
-  private UserService userService;
+  private AccountService userService;
 
   @Autowired
   private PlanService planService;
@@ -45,7 +45,7 @@ public class PlanController {
 
   @GetMapping(path = "/find/owner/{email}")
   public List<Plan> getPlanByOwnerId(@PathVariable String email) {
-    Optional<User> owner = this.userService.findUserByEmail(email);
+    Optional<Account> owner = this.userService.findUserByEmail(email);
     if(owner.isEmpty()) {
       return List.of();
     }
@@ -57,7 +57,7 @@ public class PlanController {
 
   @PostMapping(path = "/create")
   public String createPlan(@RequestBody Plan newPlan, @RequestParam String email) {
-    Optional<User> owner = this.userService.findUserByEmail(email);
+    Optional<Account> owner = this.userService.findUserByEmail(email);
     if(owner.isEmpty()) {
       return "This user isn't exist!";
     }
@@ -77,7 +77,7 @@ public class PlanController {
   public String updatePlanInformation(@PathVariable Integer plan_id, @RequestParam String email, 
                   @RequestBody Plan updatePlan) {
 
-    Optional<User> owner = this.userService.findUserByEmail(email);
+    Optional<Account> owner = this.userService.findUserByEmail(email);
     if(owner.isEmpty()) {
       return "This user isn't exist!";
     }
@@ -97,7 +97,7 @@ public class PlanController {
 
   @DeleteMapping(path = "/delete/{plan_id}")
   public String deletePlan(@PathVariable Integer plan_id, @RequestParam String email) {
-    Optional<User> owner = this.userService.findUserByEmail(email);
+    Optional<Account> owner = this.userService.findUserByEmail(email);
     if(owner.isEmpty()) {
       return "This user isn't exist!";
     }

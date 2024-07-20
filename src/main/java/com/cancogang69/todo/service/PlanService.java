@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cancogang69.todo.entity.Plan;
-import com.cancogang69.todo.entity.User;
+import com.cancogang69.todo.entity.Account;
 import com.cancogang69.todo.repository.PlanRepository;
 
 @Service
@@ -33,7 +33,7 @@ public class PlanService {
     return (newPlan != null);
   }
 
-  public int updatePlanInformation(Integer plan_id, User owner, Plan updatePlan) {
+  public int updatePlanInformation(Integer plan_id, Account owner, Plan updatePlan) {
     Optional<Plan> plan = this.findById(plan_id);
     if(plan.isEmpty()) {
       return 1;
@@ -56,7 +56,7 @@ public class PlanService {
     }
   }
 
-  public int deletePlan(Integer plan_id, User owner) {
+  public int deletePlan(Integer plan_id, Account owner) {
     Optional<Plan> plan = this.findById(plan_id);
     if(plan.isEmpty()) {
       return 1;
