@@ -28,7 +28,8 @@ public class WebSecurityConfig {
         .passwordParameter("password")
         .defaultSuccessUrl("/")
         .failureUrl("/login?error")
-        .permitAll());
+        .permitAll()
+      );
     
     return http.build();
   }
