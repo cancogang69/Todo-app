@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("/plan")
+@RequestMapping("/api/plan")
 public class PlanRestController {
 
   @Autowired
