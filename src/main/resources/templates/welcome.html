@@ -5,6 +5,12 @@
   <title>Welcome to My ToDo</title>
 </head>
 <body>
-  <p>Welcome, this is a simple todo web app</p>
+  <p>Welcome! This is a simple todo web-app</p>
+  <hr/>
+  <div>
+    <a th:href="@{/login}">Login</a>
+    <p>Don't have a account? <a th:href="@{/register}">Register!</a></p>
+  </div>
+  <hr/>
 </body>
 </html>
