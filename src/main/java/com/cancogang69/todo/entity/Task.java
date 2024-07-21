@@ -62,4 +62,8 @@ public class Task {
   public void setPlan(Plan plan) {
     this.plan = plan;
   }
+
+  public Integer getPlanId() {
+    return this.plan.getId();
+  }
 }
