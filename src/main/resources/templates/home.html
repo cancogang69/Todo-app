@@ -16,13 +16,15 @@
     </form>
     <hr/>
     <ul>
-      <li><a th:href="@{/post/new}">Create new plan</a></li>
+      <li><a th:href="@{/plan/create}">Create new plan</a></li>
     </ul>
   </div>
 
   <div class="plans-container">
     <div class="plan" th:each="plan : ${plans}">
         <h2><a th:href="@{'/plan/' + ${plan.id}}" th:text="${plan.name}">Title</a></h2>
+        <h4 th:text="${plan.description}">Description</h4>
+        <hr/>
         <br>
     </div>
 </div>
