@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping(path = "api/task")
-public class TaskController {
+public class TaskRestController {
   
   @Autowired
   private TaskService taskService;

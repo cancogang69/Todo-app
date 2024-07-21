@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @RestController
 @RequestMapping("api/user")
-public class UserController {
+public class AccountRestController {
   
   @Autowired
   private AccountService userService;

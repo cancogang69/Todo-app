@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @RestController
 @RequestMapping("/plan")
-public class PlanController {
+public class PlanRestController {
 
   @Autowired
   private AccountService userService;
