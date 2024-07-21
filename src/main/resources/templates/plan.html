@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plan</title>
+</head>
+<body>
+  <div sec:authorize="isAuthenticated()">
+    <div>
+      <h1 th:text="${plan.name}">Title</h1>
+      <h4 th:text="${plan.description}"></h4>
+      <hr/>
+      <ul>
+        <li><a th:href="@{/home}">Return home</a></li>
+        <li><a th:href="@{'/plan/' + ${plan.id} + '/create_task'}">Create new task</a></li>
+      </ul>
+      <hr/>
+    </div>
+    <div class="task" th:each="task : ${tasks}">
+      <h3 th:text="${task.description}">Description</h3>
+      <h4 th:text="${task.status}">Status</h4>
+      <a th:href="@{'/task/' + ${task.id} + '/completed'}">Completed</a>
+      <a th:href="@{'/task/' + ${task.id} + '/delete'}">Delete</a>
+      <hr/>
+  </div>
+  </div>
+  
+</body>
+</html>
