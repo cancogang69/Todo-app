@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo</title>
+</head>
+<body>
+  <div sec:authorize="isAuthenticated()">
+    <form th:action="@{/logout}" method="POST">
+        <div>
+            <label>Hi, <span sec:authentication="name">Username</span></label>
+        </div>
+        <button type="submit">Logout</button>
+    </form>
+    <hr/>
+    <ul>
+      <li><a th:href="@{/post/new}">Create new plan</a></li>
+    </ul>
+  </div>
+
+  <div class="plans-container">
+    <div class="plan" th:each="plan : ${plans}">
+        <h2><a th:href="@{'/plan/' + ${plan.id}}" th:text="${plan.name}">Title</a></h2>
+        <br>
+    </div>
+</div>
+</body>
+</html>
