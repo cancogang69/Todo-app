@@ -1,4 +1,4 @@
-package com.cancogang69.todo.controller;
+package com.cancogang69.todo.restcontroller;
 
 import java.util.List;
 import java.util.Optional;

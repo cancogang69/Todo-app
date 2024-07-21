@@ -1,4 +1,4 @@
-package com.cancogang69.todo.controller;
+package com.cancogang69.todo.restcontroller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;

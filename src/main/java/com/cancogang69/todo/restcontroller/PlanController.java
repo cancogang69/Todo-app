@@ -1,4 +1,4 @@
-package com.cancogang69.todo.controller;
+package com.cancogang69.todo.restcontroller;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 
 @RestController
-@RequestMapping("api/plan")
+@RequestMapping("/plan")
 public class PlanController {
 
   @Autowired
