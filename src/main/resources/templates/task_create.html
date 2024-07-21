@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New plan</title>
+</head>
+<body>
+  <div class="container">
+    <form action="#" th:action="@{'/plan/' + ${plan.id} + '/create_task'}"
+    th:object="${task}" method="POST">
+    <h2>Create new task</h2>
+    <hr/>
+    <div>
+      <label>Description</label>
+      <input type="text" th:field="*{description}"/>
+    </div>
+    <button type="submit">Create</button>
+    </form>
+    <a th:href="@{'/plan/' + ${plan.id}}">Cancel</a>
+  </div>
+</body>
+</html>
