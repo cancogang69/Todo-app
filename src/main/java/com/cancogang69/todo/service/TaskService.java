@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cancogang69.todo.entity.Task;
+import com.cancogang69.todo.enums.TaskStatus;
 import com.cancogang69.todo.entity.Plan;
 import com.cancogang69.todo.repository.TaskRepository;
 
@@ -32,6 +33,18 @@ public class TaskService {
     task.setPlan(plan);
     taskRepo.save(task);
     return 0;
+  }
+
+  public boolean updateTaskStatus(Integer task_id, TaskStatus newStatus) {
+    Optional<Task> task = getById(task_id);
+    if(task.isEmpty()) {
+      return false;
+    }
+
+    Task existing_task = task.get();
+    existing_task.setStatus(newStatus);
+    taskRepo.save(existing_task);
+    return true;
   }
 
   public boolean updateTaskInformation(Integer task_id, Task updateTask) {
