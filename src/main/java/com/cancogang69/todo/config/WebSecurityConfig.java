@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 
 @Configuration
@@ -33,5 +35,10 @@ public class WebSecurityConfig {
       );
     
     return http.build();
+  }
+
+  @Bean
+  public static PasswordEncoder bcryptPasswordEncoder() {
+    return new BCryptPasswordEncoder();
   }
 }
