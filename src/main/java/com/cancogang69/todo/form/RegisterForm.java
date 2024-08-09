@@ -6,7 +6,7 @@ import com.cancogang69.todo.enums.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
-public class AccountForm {
+public class RegisterForm {
   
   @NotBlank
   private String name;
