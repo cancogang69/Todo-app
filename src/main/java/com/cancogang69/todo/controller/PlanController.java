@@ -6,6 +6,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,8 @@ import com.cancogang69.todo.entity.Task;
 import com.cancogang69.todo.service.AccountService;
 import com.cancogang69.todo.service.PlanService;
 import com.cancogang69.todo.service.TaskService;
+
+import jakarta.validation.Valid;
 
 
 @Controller
@@ -54,19 +57,24 @@ public class PlanController {
   
   @PostMapping(path = "/create")
   @PreAuthorize("isAuthenticated()")
-  public String createPlan(@ModelAttribute Plan plan) {
+  public String createPlan(@Valid Plan plan, BindingResult bindingResult) {
+    if(bindingResult.hasErrors()) {
+      return "plan_create";
+    }
+
     String email = getLoggedInEmail();
-    Optional<Account> account = accountService.findUserByEmail(email);
+    Optional<Account> account = accountService.findByEmail(email);
     if(account.isEmpty())
-      return "/home";
+      return "login";
 
     plan.setOwner(account.get());
     boolean isCreateSuccessful = planService.createPlan(plan);
+
     if(isCreateSuccessful) {
       return "redirect:/home";
     }
     else {
-      return "";
+      return "error_page";
     }
   }
 
