@@ -25,21 +25,20 @@ public class HomeController {
   @Autowired
   private PlanService planService;
 
-  private String getLoggedInUsername() {
+  private String getLoggedInEmail() {
     Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    if(principal instanceof UserDetails) {
-      return ((UserDetails) principal).getUsername();
-    }
-    return principal.toString();
+    UserDetails userDetails = (UserDetails) principal;
+    return userDetails.getUsername();
   }
 
   @GetMapping(path = "/home")
   @PreAuthorize("isAuthenticated()")
   public String getHomePage(Model model) {
-    String username = getLoggedInUsername();
-    Optional<Account> account = accountService.findUserByEmail(username);
+    String email = getLoggedInEmail();
+    Optional<Account> account = accountService.findByEmail(email);
 
     List<Plan> plans = planService.findByOwnerId(account.get().getId());
+    model.addAttribute("username", account.get().getName());
     model.addAttribute("plans", plans);
     return "home";
   }

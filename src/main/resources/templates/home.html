@@ -10,7 +10,7 @@
   <div sec:authorize="isAuthenticated()">
     <form th:action="@{/logout}" method="POST">
         <div>
-            <label>Hi, <span sec:authentication="name">Username</span></label>
+            <label>Hi, <span th:text="${username}"></span></label>
         </div>
         <button type="submit">Logout</button>
     </form>
