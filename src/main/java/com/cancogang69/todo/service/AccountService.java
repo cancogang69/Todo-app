@@ -19,31 +19,37 @@ public class AccountService {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
-  public List<Account> findAllUser() {
+  public List<Account> findAll() {
     return this.userRepo.findAll();
   }
 
-  public Optional<Account> findUserById(Integer id) {
+  public Optional<Account> findById(Integer id) {
     return this.userRepo.findById(id);
   }
 
-  public Optional<Account> findUserByEmail(String email) {
+  public Optional<Account> findByEmail(String email) {
     Account someone = this.userRepo.findUserByEmail(email);
     return Optional.ofNullable(someone);
   }
 
-  public Account findUserByEmailAndPassword(String email, String password) {
+  public Account findByEmailAndPassword(String email, String password) {
     return this.userRepo.findUserByEmailAndPassword(email, password);
   }
 
-  public Account saveUser(Account newUser) {
-    newUser.setPassword(passwordEncoder.encode(newUser.getPassword()));
-    return this.userRepo.save(newUser);
+  public boolean saveUser(Account newAccount) {
+    Optional<Account> someone = this.findByEmail(newAccount.getEmail());
+    if(someone.isPresent()) {
+      return false;
+    }
+
+    newAccount.setPassword(passwordEncoder.encode(newAccount.getPassword()));
+    userRepo.save(newAccount);
+    return true;
   }
 
   public Optional<Account> updateEmail(Integer user_id, String update_email) {
-    Optional<Account> existing_user = this.findUserById(user_id);
-    if(existing_user.isEmpty() || this.findUserByEmail(update_email).isPresent()) {
+    Optional<Account> existing_user = this.findById(user_id);
+    if(existing_user.isEmpty() || this.findByEmail(update_email).isPresent()) {
       return Optional.empty();
     } 
 
@@ -54,7 +60,7 @@ public class AccountService {
   }
 
   public Optional<Account> updatePassword(Integer user_id, String update_password) {
-    Optional<Account> existing_user = this.findUserById(user_id);
+    Optional<Account> existing_user = this.findById(user_id);
     if(existing_user.isEmpty()) {
       return Optional.empty();
     }
@@ -71,7 +77,7 @@ public class AccountService {
   }
 
   public Optional<Account> updateInformation(Integer user_id, Account update_user) {
-    Optional<Account> existing_user = this.findUserById(user_id);
+    Optional<Account> existing_user = this.findById(user_id);
     if(existing_user.isEmpty() || !isAuthCorrect(existing_user.get(), update_user)) {
       return Optional.empty();
     }
@@ -83,7 +89,7 @@ public class AccountService {
   }
 
   public boolean deleteUser(Integer user_id, Account user) {
-    Optional<Account> existing_user = this.findUserById(user_id);
+    Optional<Account> existing_user = this.findById(user_id);
     if(existing_user.isEmpty() || !isAuthCorrect(existing_user.get(), user)) {
       return false;
     }
