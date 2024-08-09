@@ -1,13 +1,17 @@
 package com.cancogang69.todo.controller;
 
 import com.cancogang69.todo.service.AccountService;
+
+import jakarta.validation.Valid;
+
 import com.cancogang69.todo.entity.Account;
+import com.cancogang69.todo.form.RegisterForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 
@@ -19,14 +23,22 @@ public class RegisterController {
 
   @GetMapping(path = "/register")
   public String getRegisterPage(Model model) {
-    Account account = new Account();
-    model.addAttribute("account", account);
+    model.addAttribute("accountForm", new RegisterForm());
     return "register";  
   }
   
   @PostMapping(path = "/register")
-  public String registerNewAccount(@ModelAttribute Account account) {
-    accountService.saveUser(account);
-    return "redirect:/login";
+  public String registerNewAccount(@Valid RegisterForm registerForm, BindingResult bindingResult) {
+    if(bindingResult.hasErrors()) {
+      return "register";
+    }
+
+    Account newAccount = registerForm.createAccount();
+    boolean isSaveSuccessful = accountService.saveUser(newAccount);
+    if(isSaveSuccessful) {
+      return "redirect:/login?create_success";
+    }
+    
+    return "register?already_exist";
   }
 }
