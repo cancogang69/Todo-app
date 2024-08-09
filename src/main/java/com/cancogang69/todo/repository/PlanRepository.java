@@ -12,5 +12,5 @@ import com.cancogang69.todo.entity.Plan;
 public interface PlanRepository extends JpaRepository<Plan, Integer> {
   
   @Query(value = "SELECT * FROM plans WHERE owner_id = ?", nativeQuery = true)
-  public List<Plan> findByOwnerId(Integer id);
+  public List<Plan> findByOwnerId(Integer owner_id);
 }
