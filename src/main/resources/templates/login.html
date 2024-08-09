@@ -11,6 +11,9 @@
   <div th:if="${param.logout}">
     You have been log out
   </div>
+  <div th:if="${param.create_successfully}">
+    Your account create successfully. Please login to continue!
+  </div>
   <form th:action="@{/login}" method="POST">
     <div>
       <label for="email">Email:</label>
