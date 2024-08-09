@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "plans")
@@ -16,6 +17,7 @@ public class Plan {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
+  @NotBlank(message = "Plan name cannot be blank.")
   @Column(nullable = false)
   private String name;
 
@@ -27,6 +29,11 @@ public class Plan {
   private Account owner; 
 
   public Plan() { }
+
+  public Plan(String name, String description) {
+    this.name = name;
+    this.description = description;
+  }
 
   public Plan(String name, String description, Account owner) {
     this.name = name;
