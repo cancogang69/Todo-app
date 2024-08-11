@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.cancogang69.todo.entity.Task;
 import com.cancogang69.todo.enums.TaskStatus;
-import com.cancogang69.todo.entity.Plan;
 import com.cancogang69.todo.repository.TaskRepository;
 
 @Service
@@ -29,10 +28,9 @@ public class TaskService {
     return taskRepo.findAllTaskByPlanId(plan_id);
   }
 
-  public int createTask(Plan plan, Task task) {
-    task.setPlan(plan);
-    taskRepo.save(task);
-    return 0;
+  public boolean createTask(Task task) {
+    Task saveTask = taskRepo.save(task);
+    return (saveTask != null);
   }
 
   public boolean updateTaskStatus(Integer task_id, TaskStatus newStatus) {
