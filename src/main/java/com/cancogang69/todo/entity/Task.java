@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "tasks")
@@ -19,6 +20,7 @@ public class Task {
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Integer id;
 
+  @NotBlank(message = "Task must have description")
   @Column(nullable = false)
   private String description;
 
@@ -30,6 +32,11 @@ public class Task {
   private Plan plan;
 
   public Task() { 
+    this.status = TaskStatus.INITIAL;
+  }
+
+  public Task(String description) {
+    this.description = description;
     this.status = TaskStatus.INITIAL;
   }
 
