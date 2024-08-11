@@ -12,10 +12,23 @@
       <h1 th:text="${plan.name}">Title</h1>
       <h4 th:text="${plan.description}"></h4>
       <hr/>
-      <ul>
-        <li><a th:href="@{/home}">Return home</a></li>
-        <li><a th:href="@{'/plan/' + ${plan.id} + '/create_task'}">Create new task</a></li>
-      </ul>
+      <tr>
+        <td>
+          <form action="#" th:action="@{/home}" method="GET">
+            <button type="submit" name="Return home">Home</button>
+          </form>
+        </td>
+        <td>
+          <form action="#" th:action="@{'/plan/' + ${plan.id} + '/create_task'}" method="GET">
+            <button type="submit">Create new task</button>
+          </form>
+        </td>
+        <td>
+          <form th:action="@{/home}" method="DELETE">
+            Delete plan
+          </form>
+        </td>
+      </tr>
       <hr/>
     </div>
     <div class="task" th:each="task : ${tasks}">

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -92,15 +91,15 @@ public class PlanController {
       return "404";
     }
   }
-  
-  @GetMapping(path = "/{id}/create_task")
-  @PreAuthorize("isAuthenticated()")
-  public String getMethodName(@PathVariable Integer id, Model model) {
-    Optional<Plan> plan = planService.findById(id);
-    if(plan.isPresent()) {
-      model.addAttribute("plan", plan.get());
 
+  @GetMapping(path = "/{planId}/create_task")
+  @PreAuthorize("isAuthenticated()")
+  public String addTask(@PathVariable Integer planId, Model model) {
+    Optional<Plan> plan = planService.findById(planId);
+    if(plan.isPresent()) {
       Task task = new Task();
+
+      model.addAttribute("planId", plan.get().getId());
       model.addAttribute("task", task);
       return "task_create";
     }
@@ -109,22 +108,27 @@ public class PlanController {
     }
   }
 
-  @PostMapping(path = "/{id}/create_task")
+  @PostMapping(path ="/{planId}/create_task")
   @PreAuthorize("isAuthenticated()")
-  public String postMethodName(@ModelAttribute Task task, @PathVariable Integer id) {
-    Optional<Plan> plan = planService.findById(id);
+  public String processAddTask(@PathVariable Integer planId, Model model, 
+    @Valid Task task, BindingResult result) {
 
+    if(result.hasErrors()) {
+      return "task_create";
+    }
+
+    Optional<Plan> plan = planService.findById(planId);
     if(plan.isEmpty()) {
       return "404";
     }
 
-    int isCreateSuccessful = taskService.createTask(plan.get(), task);
-    if(isCreateSuccessful == 0) {
-      return "redirect:/plan/" + id.toString();
+    task.setPlan(plan.get());
+    boolean isCreateSuccessful = taskService.createTask(task);
+    if(isCreateSuccessful) {
+      return "redirect:/plan/" + task.getPlanId().toString();
     }
     else {
       return "404";
     }
   }
-  
 }
