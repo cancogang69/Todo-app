@@ -43,7 +43,9 @@
               th:selected="${status == task.status}"></option>
           </select>
         </form>
-        <a th:href="@{'/task/' + ${task.id} + '/delete'}">Delete</a>
+        <form th:action="@{'/task/' + ${task.id}}" method="POST">
+          <button type="submit">Delete</button>
+        </form>
         <hr/>
     </div>
     </div>
