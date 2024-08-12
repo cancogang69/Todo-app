@@ -18,6 +18,7 @@ import java.util.Optional;
 import com.cancogang69.todo.entity.Account;
 import com.cancogang69.todo.entity.Plan;
 import com.cancogang69.todo.entity.Task;
+import com.cancogang69.todo.enums.TaskStatus;
 import com.cancogang69.todo.service.AccountService;
 import com.cancogang69.todo.service.PlanService;
 import com.cancogang69.todo.service.TaskService;
@@ -83,8 +84,10 @@ public class PlanController {
     Optional<Plan> plan = planService.findById(id);
     if(plan.isPresent()) {
       List<Task> tasks = taskService.getByPlanId(id);
+      TaskStatus[] statuses = TaskStatus.values();
       model.addAttribute("plan", plan.get());
       model.addAttribute("tasks", tasks);
+      model.addAttribute("statuses", statuses);
       return "plan";
     }
     else {
