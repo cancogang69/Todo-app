@@ -7,6 +7,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cancogang69.todo.service.TaskService;
@@ -20,19 +22,13 @@ public class TaskController {
 
   @Autowired
   private TaskService taskService;
-
-  @GetMapping(path = "/{id}/completed")
+  
+  @PostMapping(path = "/{id}/status_change")
   @PreAuthorize("isAuthenticated()")
-  public String completeTask(@PathVariable Integer id) {
-    boolean isUpdateStatusSuccessful = taskService.updateTaskStatus(id, TaskStatus.COMPLETED);
-    if(isUpdateStatusSuccessful) {
-      Optional<Task> task = taskService.getById(id);
-
-      return "redirect:/plan/" + task.get().getPlanId();
-    }
-    else {
-      return "404";
-    }
+  public boolean changeTaskStatus(@PathVariable Integer id, @RequestBody String status) {
+    TaskStatus newStatus = TaskStatus.fromJson(status);
+    boolean isUpdateStatusSuccessful = taskService.updateTaskStatus(id, newStatus);
+    return isUpdateStatusSuccessful;
   }
 
   @GetMapping(path = "/{id}/delete")
