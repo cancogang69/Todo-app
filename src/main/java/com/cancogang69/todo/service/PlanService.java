@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.cancogang69.todo.entity.Plan;
-import com.cancogang69.todo.entity.Account;
 import com.cancogang69.todo.repository.PlanRepository;
 
 @Service
@@ -36,27 +35,17 @@ public class PlanService {
     return (newPlan != null);
   }
 
-  public int updatePlanInformation(Integer plan_id, Account owner, Plan updatePlan) {
-    Optional<Plan> plan = this.findById(plan_id);
+  public boolean updatePlanInformation(Integer planId, Plan editPlan) {
+    Optional<Plan> plan = findById(planId);
     if(plan.isEmpty()) {
-      return 1;
+      return false;
     }
 
     Plan existing_plan = plan.get();
-    if(existing_plan.getOwnerId() != owner.getId()) {
-      return 2;
-    }
-
-    existing_plan.setName(updatePlan.getName());
-    existing_plan.setDescription(updatePlan.getDescription());
-    Plan plan_after_update = this.planRepo.save(existing_plan);
-
-    if(plan_after_update != null) {
-      return 0;
-    }
-    else {
-      return 3;
-    }
+    existing_plan.setName(editPlan.getName());
+    existing_plan.setDescription(editPlan.getDescription());
+    Plan updatePlan = planRepo.save(existing_plan);
+    return (updatePlan != null);
   }
 
   public boolean deletePlan(Integer planId) {
@@ -69,7 +58,6 @@ public class PlanService {
     boolean isDeleteSuccessful = taskService.deleteAllPlanTask(planId);
     if(!isDeleteSuccessful) {
       return false;
-      
     }
     
     planRepo.delete(existing_plan);

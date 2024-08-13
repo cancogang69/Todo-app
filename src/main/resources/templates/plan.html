@@ -15,14 +15,19 @@
         <hr/>
         <tr>
           <td>
-            <form action="#" th:action="@{/home}" method="GET">
+            <form th:action="@{/home}" method="GET">
               <input id="csrfToken" type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
               <button type="submit" name="Return home">Home</button>
             </form>
           </td>
           <td>
-            <form action="#" th:action="@{'/plan/' + ${plan.id} + '/create_task'}" method="GET">
+            <form th:action="@{'/plan/' + ${plan.id} + '/create_task'}" method="GET">
               <button type="submit">Create new task</button>
+            </form>
+          </td>
+          <td>
+            <form th:action="@{'/plan/' + ${plan.id} + '/edit'}" method="GET">
+              <button type="submit">Edit plan</button>
             </form>
           </td>
           <td>

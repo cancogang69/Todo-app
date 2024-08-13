@@ -135,7 +135,40 @@ public class PlanController {
     }
   }
 
+  @GetMapping(path = "/{id}/edit")
+  @PreAuthorize("isAuthenticated()")
+  public String getEditPage(@PathVariable Integer id, Model model) {
+    Optional<Plan> plan = planService.findById(id);
+    if(plan.isEmpty()) {
+      return "404";
+    }
+
+    model.addAttribute("planId", plan.get().getId());
+    model.addAttribute("plan", plan.get());
+    return "plan_edit";
+  }
+
+  @PostMapping(path = "/{id}/edit")
+  @PreAuthorize("isAuthenticated()")
+  public String processEditTask(@PathVariable Integer id, @Valid Plan plan, 
+    BindingResult result, Model model) {
+
+    if(result.hasErrors()) {
+      model.addAttribute("planId", id);
+      return "plan_edit";
+    }
+    
+    boolean isUpdateSuccessful = planService.updatePlanInformation(id, plan);
+    if(!isUpdateSuccessful) {
+      return "404";
+    }
+
+    Plan updatePlan = planService.findById(id).get();
+    return "redirect:/plan/" + updatePlan.getId();
+  }  
+
   @PostMapping(path = "/{id}/delete")
+  @PreAuthorize("isAuthenticated()")
   public String processDeletePlan(@PathVariable Integer id) {
     boolean isDeleteSuccessful = planService.deletePlan(id);
     if(isDeleteSuccessful) {
