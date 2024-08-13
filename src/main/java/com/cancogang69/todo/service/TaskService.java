@@ -10,6 +10,8 @@ import com.cancogang69.todo.entity.Task;
 import com.cancogang69.todo.enums.TaskStatus;
 import com.cancogang69.todo.repository.TaskRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class TaskService {
   
@@ -64,6 +66,12 @@ public class TaskService {
     }
 
     taskRepo.delete(task.get());
+    return true;
+  }
+
+  @Transactional
+  public boolean deleteAllPlanTask(Integer planId) {
+    taskRepo.deleteAllPlanTask(planId);
     return true;
   }
 }
