@@ -7,15 +7,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 public class RegisterForm {
-  
-  @NotBlank
+  @NotBlank(message = "User must have name")
   private String name;
 
   @Email
-  @NotBlank
+  @NotBlank(message = "User must have email")
   private String email;
 
-  @NotBlank
+  @NotBlank(message = "Please provide a password")
   private String password;
 
   public void setName(String name) {

@@ -23,22 +23,24 @@ public class RegisterController {
 
   @GetMapping(path = "/register")
   public String getRegisterPage(Model model) {
-    model.addAttribute("accountForm", new RegisterForm());
+    model.addAttribute("registerForm", new RegisterForm());
     return "register";  
   }
   
   @PostMapping(path = "/register")
-  public String registerNewAccount(@Valid RegisterForm registerForm, BindingResult bindingResult) {
-    if(bindingResult.hasErrors()) {
+  public String registerNewAccount(@Valid RegisterForm registerForm, 
+    BindingResult result, Model model) {
+    
+    if(result.hasErrors()) {
       return "register";
     }
 
     Account newAccount = registerForm.createAccount();
     boolean isSaveSuccessful = accountService.saveUser(newAccount);
     if(isSaveSuccessful) {
-      return "redirect:/login?create_success";
+      return "redirect:/login?create_successfully";
     }
     
-    return "register?already_exist";
+    return "redirect:/register?already_exist";
   }
 }
