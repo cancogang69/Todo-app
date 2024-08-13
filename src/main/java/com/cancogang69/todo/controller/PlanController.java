@@ -134,4 +134,15 @@ public class PlanController {
       return "404";
     }
   }
+
+  @PostMapping(path = "/{id}/delete")
+  public String processDeletePlan(@PathVariable Integer id) {
+    boolean isDeleteSuccessful = planService.deletePlan(id);
+    if(isDeleteSuccessful) {
+      return "redirect:/home";
+    }
+    else {
+      return "404";
+    }
+  }
 }

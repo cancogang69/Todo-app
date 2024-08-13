@@ -16,6 +16,9 @@ public class PlanService {
   @Autowired
   private PlanRepository planRepo;
 
+  @Autowired
+  private TaskService taskService;
+
   public List<Plan> findAllPlan() {
     return this.planRepo.findAll();
   }
@@ -56,18 +59,20 @@ public class PlanService {
     }
   }
 
-  public int deletePlan(Integer plan_id, Account owner) {
-    Optional<Plan> plan = this.findById(plan_id);
+  public boolean deletePlan(Integer planId) {
+    Optional<Plan> plan = this.findById(planId);
     if(plan.isEmpty()) {
-      return 1;
+      return false;
     }
 
     Plan existing_plan = plan.get();
-    if(existing_plan.getOwnerId() != owner.getId()) {
-      return 2;
+    boolean isDeleteSuccessful = taskService.deleteAllPlanTask(planId);
+    if(!isDeleteSuccessful) {
+      return false;
+      
     }
     
-    this.planRepo.delete(existing_plan);
-    return 0;
+    planRepo.delete(existing_plan);
+      return true;
   }
 }
