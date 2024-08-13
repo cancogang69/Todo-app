@@ -45,17 +45,16 @@ public class TaskService {
     return true;
   }
 
-  public boolean updateTaskInformation(Integer task_id, Task updateTask) {
-    Optional<Task> task = getById(task_id);
+  public boolean updateTaskInformation(Integer taskId, Task updateTask) {
+    Optional<Task> task = getById(taskId);
     if(task.isEmpty()) {
       return false;
     }
 
     Task existing_task = task.get();
-    existing_task.setStatus(updateTask.getStatus());
     existing_task.setDescription(updateTask.getDescription());
-    taskRepo.save(existing_task);
-    return true;
+    Task result = taskRepo.save(existing_task);
+    return (result != null);
   }
 
   public boolean deleteTask(Integer task_id) {

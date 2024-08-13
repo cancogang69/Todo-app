@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task</title>
+  </head>
+
+  <body>
+    <div class="container">
+      <h2>Edit task</h2>
+      <hr/>
+      <form action="#" th:action="@{'/task/' + ${task.id} + '/edit'}" th:object="${task}" method="POST">
+        <div>
+          <label>Description</label>
+          <input type="text" th:field="*{description}"/>
+          <div>
+            <ul>
+              <li th:each="error : ${#fields.errors('description')}" th:text="${error}" class="error"></li>
+            </ul>
+          </div>
+        </div>
+        <button type="submit">Change</button>
+      </form>
+      <a th:href="@{'/plan/' + ${task.planId}}">Cancel</a>
+    </div>
+  </body>
+</html>
