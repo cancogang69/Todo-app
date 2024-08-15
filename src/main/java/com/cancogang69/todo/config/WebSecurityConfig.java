@@ -33,6 +33,10 @@ public class WebSecurityConfig {
         .defaultSuccessUrl("/home")
         .failureUrl("/login?error")
         .permitAll()
+      )
+      .logout(logout -> logout
+        .logoutSuccessUrl("/login?logout")
+        .permitAll()
       );
     
     return http.build();
