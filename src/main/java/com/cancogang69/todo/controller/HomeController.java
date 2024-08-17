@@ -36,10 +36,11 @@ public class HomeController {
   public String getHomePage(Model model) {
     String email = getLoggedInEmail();
     Optional<Account> account = accountService.findByEmail(email);
-
     List<Plan> plans = planService.findByOwnerId(account.get().getId());
+
     model.addAttribute("username", account.get().getName());
     model.addAttribute("plans", plans);
+    model.addAttribute("newPlan", new Plan());
     return "home";
   }
 }

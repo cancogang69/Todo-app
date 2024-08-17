@@ -1,32 +1,128 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Todo</title>
-</head>
-<body>
-  <div sec:authorize="isAuthenticated()">
-    <form th:action="@{/logout}" method="POST">
-        <div>
-            <label>Hi, <span th:text="${username}"></span></label>
-        </div>
-        <button type="submit">Logout</button>
-    </form>
-    <hr/>
-    <ul>
-      <li><a th:href="@{/plan/create}">Create new plan</a></li>
-    </ul>
-  </div>
+<html xmlns:th="https://www.thymeleaf.org">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <style>
+      .hidden {
+          visibility: hidden;
+          overflow: hidden;
+          width: 0px;
+          height: 0px;
+      }
+      </style>
+  </head>
 
-  <div class="plans-container">
-    <div class="plan" th:each="plan : ${plans}">
-        <h2><a th:href="@{'/plan/' + ${plan.id}}" th:text="${plan.name}">Title</a></h2>
-        <h4 th:text="${plan.description}">Description</h4>
-        <hr/>
-        <br>
+  <body>
+    <!-- Navigation bar section -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <span class="navbar-brand mb-0 h1">My todo</span>
+        </div>
+        <ul class="nav navbar-nav me-auto mb-3 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link active pe-auto" aria-current="page" th:href="@{/home}" role="button">Home</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right mb-3 mb-lg-0">
+          <div class="dropdown">
+            <li class="nav-item">
+              <a class="nav-link btn btn-secondary" role="button" href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                <span class="navbar-toggler-icon"></span>
+              </a>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" th:href="@{/account}">Edit account</a></li>
+                <li>
+                  <form th:action="@{/logout}" method="POST">
+                    <button class="dropdown-item btn" type="submit">Logout</button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+          </div>
+        </ul>
+      </div>
+    </nav>
+    
+    <!-- Body section -->
+    <div class="container-fluid">
+      <div class="mt-2 col-md-12"></div>
+      <h1>Hi, <span th:text="${username}">User</span></h1>
+
+      <div class="mt-5 col-md-12"></div>
+
+      <div class="accordion" id="create-plan-accordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="create-plan-heading">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" aria-expanded="true" data-bs-target="#create-plan-collapse" aria-controls="create-plan-collapse">
+              <h3>Create new plan</h2>
+            </button>
+          </h2>
+          <div id="create-plan-collapse" class="accordion-collapse collapse" aria-labelledby="create-plan-heading" data-bs-parent="#create-plan-accordion">
+            <div class="accordion-body">
+              <form id="create-plan-form" th:action="@{/plan}" th:object="${newPlan}" method="POST">
+                <div class="mb-3 form-outline">
+                  <input id="new-plan-name" type="text" th:field="*{name}" class="form-control form-control-lg" placeholder="Name"/>
+                  <div>
+                    <ul id="new-plan-name-error" class="list-unstyled hidden">
+                      <li class="text-danger">
+                        Plan must have a name
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="mb-3 form-outline">
+                  <input type="text" th:field="*{description}" class="form-control form-control-lg" placeholder="Description"/>
+                </div>
+                <button class="btn btn-primary" type="button" th:onclick="validateForm()">Create</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-5 col-md-12"></div>
+
+      <div class="card">
+        <h2 class="card-header">Your todo</h2>
+        <div class="card-body">
+          <div class="accordion" id="main-accordion">
+            <div class="plan" th:each="plan : ${plans}">
+              <div class="accordion-item">
+                <h2 class="accordion-header" th:id="'heading-' + ${plan.id}">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" aria-expanded="true" th:attr="data-bs-target='#collapse-'+${plan.id},aria-controls='collapse-'+${plan.id}">
+                    <h2><span th:text="${plan.name}">Title</span></h2>
+                  </button>
+                </h2>
+                <div th:id="'collapse-' + ${plan.id}" class="accordion-collapse collapse" th:attr="aria-labelledby='heading-'+${plan.id},data-bs-parent='#main-accordion'">
+                  <div class="accordion-body">
+                    <h6 th:text="${plan.description}">Description</h4>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</div>
-</body>
+  </body>
+  <script th:inline="javascript">
+    function validateForm() {
+      var planName = document.getElementById("new-plan-name").value;
+
+      if(planName.trim() === "") {
+        document.getElementById("new-plan-name-error").style.visibility = "visible";
+        document.getElementById("new-plan-name-error").style.overflow = "visible";
+        document.getElementById("new-plan-name-error").style.width = "100%";
+        document.getElementById("new-plan-name-error").style.height = "100%";
+        return;
+      }
+
+      var form = document.getElementById("create-plan-form");
+      form.submit();
+    }
+  </script>
 </html>

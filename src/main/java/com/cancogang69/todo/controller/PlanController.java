@@ -46,27 +46,12 @@ public class PlanController {
     }
     return principal.toString();
   }
-
-  @GetMapping(path = "/create")
-  @PreAuthorize("isAuthenticated()")
-  public String createPlan(Model model) {
-    Plan newPlan = new Plan();
-    model.addAttribute("plan", newPlan);
-    return "plan_create";
-  }
   
-  @PostMapping(path = "/create")
+  @PostMapping
   @PreAuthorize("isAuthenticated()")
-  public String createPlan(@Valid Plan plan, BindingResult bindingResult) {
-    if(bindingResult.hasErrors()) {
-      return "plan_create";
-    }
-
+  public String createPlan(@Valid Plan plan, BindingResult bindingResult, Model model) {
     String email = getLoggedInEmail();
     Optional<Account> account = accountService.findByEmail(email);
-    if(account.isEmpty())
-      return "login";
-
     plan.setOwner(account.get());
     boolean isCreateSuccessful = planService.createPlan(plan);
 
