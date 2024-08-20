@@ -99,7 +99,7 @@
                 <div class="mb-3 form-outline">
                   <input type="text" th:field="*{description}" class="form-control form-control-lg" placeholder="Description"/>
                 </div>
-                <button class="btn btn-primary" type="button" th:onclick="validateForm()">Create</button>
+                <button class="btn btn-primary" type="button" th:onclick="validateForm('new-plan-name-error')">Create</button>
               </form>
             </div>
           </div>
@@ -137,17 +137,16 @@
                           </a>
                         </li>
                         <li class="nav-item">
-                          <a th:href="'#edit-pane-' + ${plan.id}" th:id="'edit-tab-' + ${plan.id}" 
-                            class="nav-link" data-bs-toggle="tab" role="tab">
-                            Edit plan
-                          </a>
-                        </li>
-                        <li class="nav-item">
                           <a th:href="'#add-task-pane-' + ${plan.id}" th:id="'add-task-tab-' + ${plan.id}" 
-                            class="nav-link" data-bs-toggle="tab" role="tab">
-                            Create new task
-                          </a>
-                        </li>
+                          class="nav-link" data-bs-toggle="tab" role="tab">
+                          Create new task
+                        </a>
+                      </li>
+                      <li class="nav-item">
+                        <a th:href="@{'/plan/' + ${plan.id} + '/edit'}" class="nav-link">
+                          Edit plan
+                        </a>
+                      </li>
                         <li class="nav-item">
                           <form th:action="@{'/plan/' + ${plan.id} + '/delete'}" method="DELETE">
                             <button type="submit" class="nav-link text-danger"
@@ -220,23 +219,6 @@
                             </div>
                           </div>
                         </div>
-                        <div th:id="'edit-pane-' + ${plan.id}" class="card tab-pane fade" role="tabpanel" 
-                          th:attr="aria-labelledby='edit-tab-' + ${plan.id}">
-                          <div class="card-header" th:id="'heading-edit-' + ${plan.id}" role="tab">
-                            <h5 class="mb-0">
-                              <a data-bs-toggle="collapse" th:href="'#collapse-edit-' + ${plan.id}" aria-expanded="true" 
-                                th:attr="aria-controls='collapse-edit-' + ${plan.id}">
-                                Edit group
-                              </a>
-                            </h5>
-                          </div>
-                          <div th:id="'collapse-edit-' + ${plan.id}" class="collapse show" role="tabpanel"
-                            th:attr="aria-labelledby='heading-edit-' + ${plan.id}">
-                            <div class="card-body">
-                              [Tab content A]
-                            </div>
-                          </div>
-                        </div>
                         <div th:id="'add-task-pane-' + ${plan.id}" class="card tab-pane fade" role="tabpanel" 
                           th:attr="aria-labelledby='add-task-tab-' + ${plan.id}">
                           <div class="card-header" th:id="'heading-add-task-' + ${plan.id}" role="tab">
@@ -264,18 +246,18 @@
     </div>
   </body>
   <script th:inline="javascript">
-    function validateForm() {
-      var planName = document.getElementById("new-plan-name").value;
+    function validateForm(formId, inputId, errorId) {
+      var planName = document.getElementById(inputId).value;
 
       if(planName.trim() === "") {
-        document.getElementById("new-plan-name-error").style.visibility = "visible";
-        document.getElementById("new-plan-name-error").style.overflow = "visible";
-        document.getElementById("new-plan-name-error").style.width = "100%";
-        document.getElementById("new-plan-name-error").style.height = "100%";
+        document.getElementById(errorId).style.visibility = "visible";
+        document.getElementById(errorId).style.overflow = "visible";
+        document.getElementById(errorId).style.width = "100%";
+        document.getElementById(errorId).style.height = "100%";
         return;
       }
 
-      var form = document.getElementById("create-plan-form");
+      var form = document.getElementById(formId);
       form.submit();
     }
     async function changeStatus(taskId) {

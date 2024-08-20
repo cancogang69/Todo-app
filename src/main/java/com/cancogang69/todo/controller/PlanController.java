@@ -148,8 +148,7 @@ public class PlanController {
       return "404";
     }
 
-    Plan updatePlan = planService.findById(id).get();
-    return "redirect:/plan/" + updatePlan.getId();
+    return "redirect:/home";
   }  
 
   @PostMapping(path = "/{id}/delete")
