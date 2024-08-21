@@ -16,7 +16,7 @@
             <div class="card-body p-5 text-center">
               <div class="mb-md-5 mt-md-4 pb-5">
                 <h2 class="fw-bold mb-2 text-uppercase">Edit</h2>
-                <form th:action="@{'/task/' + ${task.id} + '/edit'}" th:object="${task}" method="POST">
+                <form th:action="@{'/task/' + ${taskId} + '/edit'}" th:object="${task}" method="POST">
                   <div class="mb-3 form-outline">
                     <input type="text" th:field="*{description}" class="form-control form-control-lg" placeholder="Description"/>
                     <div>
@@ -26,7 +26,7 @@
                     </div>
                   </div>
                   <button type="submit" class="btn btn-outline-primary px-4">Update</button>
-                  <a th:href="@{'/plan/' + ${task.planId}}" class="btn btn-outline-danger">Cancel</a>
+                  <a th:href="@{'/plan/' + ${planId}}" class="btn btn-outline-danger">Cancel</a>
                 </form>
               </div>
             </div>

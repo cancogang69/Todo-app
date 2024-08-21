@@ -45,13 +45,23 @@ public class TaskController {
       return "404";
     } 
 
+    model.addAttribute("taskId", task.get().getId());
     model.addAttribute("task", task.get());
+    model.addAttribute("planId", task.get().getPlanId());
     return "task_edit";
   }
 
   @PostMapping(path = "/{id}/edit")
-  public String proccessUpdateTask(@PathVariable Integer id, @Valid Task editTask, BindingResult result) {
+  public String proccessUpdateTask(@PathVariable Integer id, @Valid Task editTask, 
+    BindingResult result, Model model) {
     if(result.hasErrors()) {
+      Optional<Task> task = taskService.getById(id);
+      if(task.isEmpty()) {
+        return "404";
+      }
+      
+      model.addAttribute("taskId", task.get().getId());
+      model.addAttribute("planId", task.get().getPlanId());
       return "task_edit";
     }
 
