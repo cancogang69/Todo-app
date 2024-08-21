@@ -76,167 +76,81 @@
 
       <div class="mt-5 col-md-12"></div>
 
-      <div class="accordion" id="create-plan-accordion">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="create-plan-heading">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" aria-expanded="true" data-bs-target="#create-plan-collapse" aria-controls="create-plan-collapse">
-              <h3>Create new plan</h2>
-            </button>
-          </h2>
-          <div id="create-plan-collapse" class="accordion-collapse collapse" aria-labelledby="create-plan-heading" data-bs-parent="#create-plan-accordion">
-            <div class="accordion-body">
-              <form id="create-plan-form" th:action="@{/plan}" th:object="${newPlan}" method="POST">
-                <div class="mb-3 form-outline">
-                  <input id="new-plan-name" type="text" th:field="*{name}" class="form-control form-control-lg" placeholder="Name"/>
-                  <div>
-                    <ul id="new-plan-name-error" class="list-unstyled hidden">
-                      <li class="text-danger">
-                        Plan must have a name
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-                <div class="mb-3 form-outline">
-                  <input type="text" th:field="*{description}" class="form-control form-control-lg" placeholder="Description"/>
-                </div>
-                <button class="btn btn-primary" type="button" th:onclick="validateForm('new-plan-name-error')">Create</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mt-5 col-md-12"></div>
-
       <div class="card">
-        <h2 class="card-header">Your todo</h2>
+        <div class="card-header">
+          <ul class="nav nav-tabs card-header-tabs mt-4" role="tablist">
+            <li class="nav-item">
+              <a id="plan-tab" href="#plan-pane" class="nav-link active" data-bs-toggle="tab" role="tab">
+                Plans
+              </a>
+            </li>
+            <li class="nav-item">
+              <a id="add-plan-tab" href="#add-plan-pane" class="nav-link" data-bs-toggle="tab" role="tab">
+                Create new plan
+              </a>
+            </li>
+        </div>
         <div class="card-body">
-          <div class="accordion" id="main-accordion">
-            <div class="plan" th:each="plan : ${plans}">
-              <div class="accordion-item">
-                <h2 class="accordion-header" th:id="'heading-' + ${plan.id}">
-                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" aria-expanded="true" th:attr="data-bs-target='#collapse-' + ${plan.id},aria-controls='#collapse-' + ${plan.id}">
-                    <h3>
-                      <span th:text="${plan.name}">Name</span>
-                    </h3>
-                    <div class="col-md-1"></div>
-                    <h6>
-                      <span th:text="${plan.description}">Description</span>
-                    </h6>
-                  </button>
-                </h2>
-                <div th:id="'collapse-' + ${plan.id}" class="accordion-collapse collapse" 
-                  th:attr="aria-labelledby='heading-' + ${plan.id}" data-bs-parent="#main-accordion">
-                  <div class="accordion-body">
-                    <div class="responsive-tabs">
-                      <ul class="nav nav-tabs" role="tablist">
-                        <li class="nav-item">
-                          <a th:href="'#task-pane-' + ${plan.id}" th:id="'task-tab-' + ${plan.id}" 
-                            class="nav-link active" data-bs-toggle="tab" role="tab">
-                            Tasks
-                          </a>
-                        </li>
-                        <li class="nav-item">
-                          <a th:href="'#add-task-pane-' + ${plan.id}" th:id="'add-task-tab-' + ${plan.id}" 
-                          class="nav-link" data-bs-toggle="tab" role="tab">
-                          Create new task
-                        </a>
-                      </li>
-                      <li class="nav-item">
-                        <a th:href="@{'/plan/' + ${plan.id} + '/edit'}" class="nav-link">
-                          Edit plan
-                        </a>
-                      </li>
-                        <li class="nav-item">
-                          <form th:action="@{'/plan/' + ${plan.id} + '/delete'}" method="DELETE">
-                            <button type="submit" class="nav-link text-danger"
-                              th:data-confirm-delete="|Are you sure you want to delete this plan?|"
-                              onclick="return confirm(this.getAttribute('data-confirm-delete'))"
-                              >
-                              Delete plan
-                            </button>
-                          </form>
-                        </li>
-                      </ul>
-  
-                      <div class="tab-content">
-                        <div th:id="'task-pane-' + ${plan.id}" class="card tab-pane fade show active" role="tabpanel" 
-                          th:attr="aria-labelledby='task-tab-' + ${plan.id}">
-                          <div class="card-header" role="tab" id="heading-task">
-                            <h5 class="mb-0">
-                              <a data-bs-toggle="collapse" th:href="'#collapse-task-' + ${plan.id}" aria-expanded="true" 
-                                th:attr="aria-controls='collapse-task-' + ${plan.id}">
-                                Task group
-                              </a>
-                            </h5> 
-                          </div>
-                          <div th:id="'collapse-task-' + ${plan.id}" class="collapse show" role="tabpanel"
-                            aria-labelledby="heading-task">
-                            <div class="card-body">
-                              <ul class="list-group list-group-flush">
-                                <li class="list-group-item" th:each="task : ${tasks}">
-                                  <h5 th:text="${task.description}">Description</h5>
-                                  <ul class="nav" role="tablist">
-                                    <li class="nav-item">
-                                      <form th:onchange="'changeStatus(' + ${task.id} + ')'">
-                                        <select class=" form-select" th:id="${task.id} + '_status'" name="new_status">
-                                          <option th:each="status : ${statuses}" 
-                                            th:value="${status}" 
-                                            th:text="${status}"
-                                            th:selected="${status == task.status}"></option>
-                                        </select>
-                                      </form>
-                                    </li>
-                                    <li class="nav-item">
-                                      <button class="nav-link" data-bs-toggle="collapse" data-bs-target="#col1" aria-expanded="false" aria-controls="col1">
-                                        Edit task
-                                      </button>
-                                    </li>
-                                    <li class="nav-item">
-                                      <form th:action="@{'/task/' + ${task.id} + '/delete'}" method="POST">
-                                        <button class="nav-link text-danger" type="submit">Delete</button>
-                                      </form>
-                                    </li>
-                                  </ul>
-                                  <div id="col1" class="collapse">
-                                    <div class="card-body">
-                                      <form th:action="@{'/task/' + ${task.id} + '/edit'}" th:object="${task}" method="POST">
-                                        <div>
-                                          <label>Description</label>
-                                          <input type="text" th:field="*{description}"/>
-                                          <div>
-                                            <ul>
-                                              <li th:each="error : ${#fields.errors('description')}" th:text="${error}" class="error"></li>
-                                            </ul>
-                                          </div>
-                                        </div>
-                                        <button type="submit">Change</button>
-                                      </form>
-                                    </div>
-                                  </div>
-                                </li>
-                              </ul>
+          <div class="responsive-tabs">
+            <div class="tab-content">
+              <div id="plan-pane" class="card tab-pane fade show active" role="tabpanel" 
+                aria-labelledby="plan-tab">
+                <div id="collapse-plan" class="collapse show" role="tabpanel" 
+                  aria-labelledby="heading-plan">
+                  <ul class="list-group list-group-flush">
+                    <li class="list-group-item" th:each="plan : ${plans}">
+                          <a th:href="@{'/plan/' + ${plan.id}}" class="link-underline link-underline-opacity-0" type="button">
+                            <div class="card">
+                              <div class="card-body">
+                                <h2 class="card-title text-primary">
+                                  <span th:text="${plan.name}">
+                                    Name
+                                  </span>
+                                </h2>
+                                <p class="card-text text-info-emphasis">
+                                  <span th:text="${plan.description}">
+                                    Description
+                                  </span>
+                                </p>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                        <div th:id="'add-task-pane-' + ${plan.id}" class="card tab-pane fade" role="tabpanel" 
-                          th:attr="aria-labelledby='add-task-tab-' + ${plan.id}">
-                          <div class="card-header" th:id="'heading-add-task-' + ${plan.id}" role="tab">
-                            <h5 class="mb-0">
-                              <a data-bs-toggle="collapse" th:href="'#collapse-add-task-' + ${plan.id}" aria-expanded="true" 
-                               th:attr="aria-controls='collapse-add-task-' + ${plan.id}">
-                                Create new task group
-                              </a>
-                            </h5>
-                          </div>
-                          <div th:id="'collapse-add-task-' + ${plan.id}" class="collapse show" role="tabpanel"
-                            th:attr="aria-labelledby='heading-add-task-' + ${plan.id}">
-                            <div class="card-body">[Tab content b]</div>
-                          </div>
+                          </a>  
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div id="add-plan-pane" class="card tab-pane fade" role="tabpanel" 
+                aria-labelledby="add-plan-tab">
+                <div class="card-header" role="tab" id="heading-add-plan">
+                  <h5 class="mb-0">
+                    <a data-bs-toggle="collapse" href="#collapse-add-plan" aria-expanded="true" 
+                      aria-controls="collapse-add-plan">
+                      
+                    </a>
+                  </h5> 
+                </div>
+                <div id="collapse-add-plan" class="collapse show" role="tabpanel" 
+                  aria-labelledby="heading-add-plan">
+                  <div class="card-body">
+                    <form id="create-plan-form" th:action="@{/plan}" th:object="${newPlan}" method="POST">
+                      <div class="mb-3 form-outline">
+                        <input id="new-plan-name" type="text" th:field="*{name}" class="form-control form-control-lg" placeholder="Name"/>
+                        <div>
+                          <ul id="new-plan-name-error" class="list-unstyled hidden">
+                            <li class="text-danger">
+                              Plan must have a name
+                            </li>
+                          </ul>
                         </div>
                       </div>
+                      <div class="mb-3 form-outline">
+                        <input type="text" th:field="*{description}" class="form-control form-control-lg" placeholder="Description"/>
+                      </div>
+                      <button class="btn btn-primary" type="button" 
+                        th:onclick="|validateForm('new-plan-name', 'new-plan-name-error', 'create-plan-form')|">
+                        Create</button>
+                    </form>
                   </div>
-                </div>
                 </div>
               </div>
             </div>
@@ -246,7 +160,7 @@
     </div>
   </body>
   <script th:inline="javascript">
-    function validateForm(formId, inputId, errorId) {
+    function validateForm(inputId, errorId, formId) {
       var planName = document.getElementById(inputId).value;
 
       if(planName.trim() === "") {
@@ -259,25 +173,6 @@
 
       var form = document.getElementById(formId);
       form.submit();
-    }
-    async function changeStatus(taskId) {
-      var selectedStatus = document.getElementById(taskId + "_status").value;
-      var csrfToken = document.getElementById("csrfToken").value;
-
-      var data = {
-        "status": selectedStatus
-      }
-
-      const updateStatus = await fetch("/task/" + taskId + "/status_change", {
-        method: "POST",
-        headers: {
-          "X-CSRF-Token": csrfToken,
-          "Content-type": "application/json"
-        },
-        body: JSON.stringify(data)
-      })
-
-      window.location.reload();
     }
   </script>
 </html>
