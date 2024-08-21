@@ -29,7 +29,7 @@
                     <input type="text" th:field="*{description}" class="form-control form-control-lg" placeholder="Description"/>
                   </div>
                   <button type="submit" class="btn btn-outline-primary px-4">Update</button>
-                  <a th:href="@{/home}" class="btn btn-outline-danger">Cancel</a>
+                  <a th:href="@{'/plan/' + ${planId}}" class="btn btn-outline-danger">Cancel</a>
                 </form>
               </div>
             </div>

@@ -70,26 +70,13 @@ public class PlanController {
     if(plan.isPresent()) {
       List<Task> tasks = taskService.getByPlanId(id);
       TaskStatus[] statuses = TaskStatus.values();
+      Task newTask = new Task();
+
       model.addAttribute("plan", plan.get());
       model.addAttribute("tasks", tasks);
       model.addAttribute("statuses", statuses);
+      model.addAttribute("newTask", newTask);
       return "plan";
-    }
-    else {
-      return "404";
-    }
-  }
-
-  @GetMapping(path = "/{planId}/create_task")
-  @PreAuthorize("isAuthenticated()")
-  public String addTask(@PathVariable Integer planId, Model model) {
-    Optional<Plan> plan = planService.findById(planId);
-    if(plan.isPresent()) {
-      Task task = new Task();
-
-      model.addAttribute("planId", plan.get().getId());
-      model.addAttribute("task", task);
-      return "task_create";
     }
     else {
       return "404";
