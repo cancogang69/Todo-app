@@ -135,7 +135,7 @@ public class PlanController {
       return "404";
     }
 
-    return "redirect:/home";
+    return "redirect:/plan/" + id.toString();
   }  
 
   @PostMapping(path = "/{id}/delete")
