@@ -77,7 +77,7 @@
       <div class="mt-5 col-md-12"></div>
 
       <div class="card">
-        <div class="card-header">
+        <div class="card-header bg-primary-subtle">
           <ul class="nav nav-tabs card-header-tabs mt-4" role="tablist">
             <li class="nav-item">
               <a id="plan-tab" href="#plan-pane" class="nav-link active" data-bs-toggle="tab" role="tab">
@@ -99,22 +99,22 @@
                   aria-labelledby="heading-plan">
                   <ul class="list-group list-group-flush">
                     <li class="list-group-item" th:each="plan : ${plans}">
-                          <a th:href="@{'/plan/' + ${plan.id}}" class="link-underline link-underline-opacity-0" type="button">
-                            <div class="card">
-                              <div class="card-body">
-                                <h2 class="card-title text-primary">
-                                  <span th:text="${plan.name}">
-                                    Name
-                                  </span>
-                                </h2>
-                                <p class="card-text text-info-emphasis">
-                                  <span th:text="${plan.description}">
-                                    Description
-                                  </span>
-                                </p>
-                              </div>
-                            </div>
-                          </a>  
+                      <a th:href="@{'/plan/' + ${plan.id}}" class="link-underline link-underline-opacity-0" type="button">
+                        <div class="card">
+                          <div class="card-body">
+                            <h2 class="card-title text-primary">
+                              <span th:text="${plan.name}">
+                                Name
+                              </span>
+                            </h2>
+                            <p class="card-text text-info-emphasis">
+                              <span th:text="${plan.description}">
+                                Description
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                      </a>  
                     </li>
                   </ul>
                 </div>
