@@ -103,4 +103,17 @@ public class AccountController {
         return "redirect:/account?email_change_successfully";
     }
   }
+
+  @PostMapping(path = "/account/change_password")
+  @PreAuthorize("isAuthenticated()")
+  public String changePassword(AccountForm accountForm) {
+    ChangeCode status = accountService.updatePassword(getLoggedInEmail(), accountForm);
+    
+    switch (status) {
+      case ChangeCode.WRONG_PASSWORD:
+        return "redirect:/account?wrong_old_password";
+      default:
+        return "redirect:/account?password_change_successfully";
+    }
+  }
 }

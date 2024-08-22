@@ -81,6 +81,9 @@
       <div th:if="${param.information_change_successfully}" class="text-success mb-2">
         Change information successfully!
       </div>
+      <div th:if="${param.password_change_successfully}" class="text-success mb-2">
+        Change password successfully!
+      </div>
 
       <!-- Error section -->
       <div th:if="${param.information_form_wrong_password}" class="text-danger mb-2">
@@ -156,7 +159,7 @@
                       </div>
                     </div>
                     <button class="btn btn-primary" type="button" 
-                      th:onclick="|validateEmailForm(['username', 'information-password'], [false, false],
+                      th:onclick="|validateForm(['username', 'information-password'], [false, false],
                       ['username-error', 'information-password-error'], 'information-form')|">
                       Change
                     </button>
@@ -191,9 +194,8 @@
                       </div>
                     </div>
                     <button class="btn btn-primary" type="button" 
-                      th:onclick="|validateEmailForm(['email', 'password'], [true, false],
-                        ['email-error', 'password-error'], 'email-form')|"
-                      >
+                      th:onclick="|validateForm(['email', 'password'], [true, false],
+                        ['email-error', 'password-error'], 'email-form')|">
                       Change
                     </button>
                   </form>
@@ -207,6 +209,13 @@
                     <div class="mb-3 form-outline">
                       <input id="old-password" type="password" th:field="*{oldPassword}"
                         class="form-control form-control-lg" placeholder="Old password"/>
+                      <div>
+                        <ul id="old-password-error" class="list-unstyled hidden">
+                          <li class="text-danger">
+                            Please enter your old password!
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                     <div class="mb-3 form-outline">
                       <input id="new-password" type="password" th:field="*{newPassword}"
@@ -214,13 +223,14 @@
                       <div>
                         <ul id="new-password-error" class="list-unstyled hidden">
                           <li class="text-danger">
-                            Your new password cannot be empty!
+                            Please enter your new password!
                           </li>
                         </ul>
                       </div>
                     </div>
                     <button class="btn btn-primary" type="button" 
-                      th:onclick="|validateForm('old-password', 'password-error', 'password-form')|">
+                      th:onclick="|validateForm(['old-password', 'new-password'], [false, false],
+                      ['old-password-error', 'new-password-error'], 'password-form')|">
                       Change
                     </button>
                   </form>
@@ -289,7 +299,7 @@
       errorElement.style.height = "0px";
     }
 
-    function validateEmailForm(inputs, isEmails, errorIds ,formId) {
+    function validateForm(inputs, isEmails, errorIds ,formId) {
       var errorFlag = false;
       for(var i=0; i<inputs.length; i++) {
         var elementValue = document.getElementById(inputs[i]).value;

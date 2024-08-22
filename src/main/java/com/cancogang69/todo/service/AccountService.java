@@ -37,7 +37,6 @@ public class AccountService {
   public Optional<Account> findByEmailAndPassword(String email, String rawPassword) {
     Optional<Account> someone = this.findByEmail(email);
     String hashedPassword = someone.get().getPassword();
-    System.out.println(hashedPassword);
     boolean isMatched = passwordEncoder.matches(rawPassword, hashedPassword);
     if(isMatched) {
       return someone;
@@ -71,20 +70,21 @@ public class AccountService {
 
     Account update_user = existing_user.get();
     update_user.setEmail(update_email);
-    existing_user = Optional.of(userRepo.save(update_user));
+    userRepo.save(update_user);
     return ChangeCode.SUCCESSFUL;
   }
 
-  public Optional<Account> updatePassword(Integer user_id, String update_password) {
-    Optional<Account> existing_user = this.findById(user_id);
+  public ChangeCode updatePassword(String email, AccountForm form) {
+    Optional<Account> existing_user = this.findByEmailAndPassword(email, form.getOldPassword());
     if(existing_user.isEmpty()) {
-      return Optional.empty();
+      return ChangeCode.WRONG_PASSWORD;
     }
 
     Account update_user = existing_user.get();
-    update_user.setPassword(update_password);
-    existing_user = Optional.of(this.userRepo.save(update_user));
-    return existing_user;
+    String hashedPassword = passwordEncoder.encode(form.getNewPassword());
+    update_user.setPassword(hashedPassword);
+    userRepo.save(update_user);
+    return ChangeCode.SUCCESSFUL;
   }
 
   public ChangeCode updateInformation(String email, AccountForm form) {
@@ -95,7 +95,7 @@ public class AccountService {
 
     Account temp_user = existing_user.get();
     temp_user.setName(form.getNewUsername());
-    existing_user = Optional.of(this.userRepo.save(temp_user));
+    userRepo.save(temp_user);
     return ChangeCode.SUCCESSFUL;
   }
 
