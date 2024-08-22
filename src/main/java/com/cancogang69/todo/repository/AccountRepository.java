@@ -11,7 +11,4 @@ public interface AccountRepository extends JpaRepository<Account, Integer> {
 
   @Query(value = "SELECT * FROM accounts WHERE email = ?", nativeQuery = true)
   public Account findUserByEmail(String email);
-
-  @Query(value = "SELECT * FROM accounts WHERE email = ?1 AND password = ?2", nativeQuery = true)
-  public Account findUserByEmailAndPassword(String email, String password);
 }

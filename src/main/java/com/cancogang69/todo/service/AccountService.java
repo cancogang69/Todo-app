@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.cancogang69.todo.entity.Account;
+import com.cancogang69.todo.enums.ChangeCode;
 import com.cancogang69.todo.repository.AccountRepository;
 
 @Service
@@ -28,12 +29,21 @@ public class AccountService {
   }
 
   public Optional<Account> findByEmail(String email) {
-    Account someone = this.userRepo.findUserByEmail(email);
+    Account someone = userRepo.findUserByEmail(email);
     return Optional.ofNullable(someone);
   }
 
-  public Account findByEmailAndPassword(String email, String password) {
-    return this.userRepo.findUserByEmailAndPassword(email, password);
+  public Optional<Account> findByEmailAndPassword(String email, String rawPassword) {
+    Optional<Account> someone = this.findByEmail(email);
+    String hashedPassword = someone.get().getPassword();
+    System.out.println(hashedPassword);
+    boolean isMatched = passwordEncoder.matches(rawPassword, hashedPassword);
+    if(isMatched) {
+      return someone;
+    }
+    else {
+      return Optional.ofNullable(null);
+    }
   }
 
   public boolean saveUser(Account newAccount) {
@@ -47,16 +57,21 @@ public class AccountService {
     return true;
   }
 
-  public Optional<Account> updateEmail(Integer user_id, String update_email) {
-    Optional<Account> existing_user = this.findById(user_id);
-    if(existing_user.isEmpty() || this.findByEmail(update_email).isPresent()) {
-      return Optional.empty();
+  public ChangeCode updateEmail(String email, String password, String update_email) {
+    Optional<Account> someone = this.findByEmail(update_email);
+    if(someone.isPresent()) {
+      return ChangeCode.EMAIL_BEEN_USED;
     } 
+
+    Optional<Account> existing_user = this.findByEmailAndPassword(email, password);
+    if(existing_user.isEmpty()) {
+      return ChangeCode.WRONG_PASSWORD;
+    }
 
     Account update_user = existing_user.get();
     update_user.setEmail(update_email);
-    existing_user = Optional.of(this.userRepo.save(update_user));
-    return existing_user;
+    existing_user = Optional.of(userRepo.save(update_user));
+    return ChangeCode.SUCCESSFUL;
   }
 
   public Optional<Account> updatePassword(Integer user_id, String update_password) {
