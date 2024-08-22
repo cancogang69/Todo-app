@@ -1,12 +1,5 @@
 package com.cancogang69.todo.controller;
 
-import com.cancogang69.todo.service.AccountService;
-
-import jakarta.validation.Valid;
-
-import com.cancogang69.todo.entity.Account;
-import com.cancogang69.todo.form.RegisterForm;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,10 +7,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.cancogang69.todo.entity.Account;
+import com.cancogang69.todo.form.RegisterForm;
+import com.cancogang69.todo.service.AccountService;
+
+import jakarta.validation.Valid;
 
 @Controller
-public class RegisterController {
-  
+public class AccountController {
+
   @Autowired
   private AccountService accountService;
 
@@ -42,5 +40,10 @@ public class RegisterController {
     }
     
     return "redirect:/register?already_exist";
+  }
+
+  @GetMapping(path = "/login") 
+  public String getLoginPage() {
+    return "login";
   }
 }
