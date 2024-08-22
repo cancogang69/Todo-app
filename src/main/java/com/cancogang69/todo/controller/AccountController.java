@@ -75,9 +75,22 @@ public class AccountController {
     return "account";
   }
 
-  @PostMapping(path = "/account/change_email")
+  @PostMapping(path = "/account/change_information")
   @PreAuthorize("isAuthenticated()")
   public String changeAccountInformation(AccountForm accountForm) {
+    ChangeCode status = accountService.updateInformation(getLoggedInEmail(), accountForm);
+    
+    switch (status) {
+      case ChangeCode.WRONG_PASSWORD:
+        return "redirect:/account?information_form_wrong_password";
+      default:
+        return "redirect:/account?information_change_successfully";
+    }
+  }
+
+  @PostMapping(path = "/account/change_email")
+  @PreAuthorize("isAuthenticated()")
+  public String changeEmail(AccountForm accountForm) {
     ChangeCode status = accountService.updateEmail(getLoggedInEmail(), 
       accountForm.getOldPassword(), accountForm.getNewEmail());
     
@@ -90,6 +103,4 @@ public class AccountController {
         return "redirect:/account?email_change_successfully";
     }
   }
-  
-  
 }

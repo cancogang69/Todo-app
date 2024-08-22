@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.cancogang69.todo.entity.Account;
 import com.cancogang69.todo.enums.ChangeCode;
+import com.cancogang69.todo.form.AccountForm;
 import com.cancogang69.todo.repository.AccountRepository;
 
 @Service
@@ -86,28 +87,20 @@ public class AccountService {
     return existing_user;
   }
 
-  private boolean isAuthCorrect(Account existing_user, Account stranger) {
-    return (existing_user.getEmail().equals(stranger.getEmail()) &&
-            existing_user.getPassword().equals(stranger.getPassword()));
-  }
-
-  public Optional<Account> updateInformation(Integer user_id, Account update_user) {
-    Optional<Account> existing_user = this.findById(user_id);
-    if(existing_user.isEmpty() || !isAuthCorrect(existing_user.get(), update_user)) {
-      return Optional.empty();
+  public ChangeCode updateInformation(String email, AccountForm form) {
+    Optional<Account> existing_user = this.findByEmailAndPassword(email, form.getOldPassword());
+    if(existing_user.isEmpty()) {
+      return ChangeCode.WRONG_PASSWORD;
     }
 
     Account temp_user = existing_user.get();
-    temp_user.setName(update_user.getName());
+    temp_user.setName(form.getNewUsername());
     existing_user = Optional.of(this.userRepo.save(temp_user));
-    return existing_user;
+    return ChangeCode.SUCCESSFUL;
   }
 
   public boolean deleteUser(Integer user_id, Account user) {
     Optional<Account> existing_user = this.findById(user_id);
-    if(existing_user.isEmpty() || !isAuthCorrect(existing_user.get(), user)) {
-      return false;
-    }
 
     this.userRepo.deleteById(user_id);
     return true;

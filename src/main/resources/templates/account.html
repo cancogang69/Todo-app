@@ -76,27 +76,26 @@
 
       <!-- Success section -->
       <div th:if="${param.email_change_successfully}" class="text-success mb-2">
-        Change email successful!
+        Change email successfully!
+      </div>
+      <div th:if="${param.information_change_successfully}" class="text-success mb-2">
+        Change information successfully!
       </div>
 
       <!-- Error section -->
       <div th:if="${param.information_form_wrong_password}" class="text-danger mb-2">
         Failed to change account information! Wrong password.
       </div>
-      
       <div th:if="${param.email_form_wrong_password}" class="text-danger mb-2">
         Failed to change email! Wrong password.
       </div> 
-
       <div th:if="${param.email_has_been_taken}" class="text-danger mb-2">
         Failed to change email! Email has already been used.
         Please enter another email.
       </div> 
-
       <div th:if="${param.wrong_old_password}" class="text-danger mb-2">
         Failed to change password! Wrong old password.
       </div>
-
       <div th:if="${param.delete_wrong_password}" class="text-danger mb-2">
         Failed to delete this account! Wrong password.
       </div>
@@ -132,7 +131,7 @@
               <div id="information-pane" class="card tab-pane fade show active" role="tabpanel" 
                 aria-labelledby="information-tab">
                 <div class="card-body">
-                  <form id="information" th:action="@{/account/change_information}" 
+                  <form id="information-form" th:action="@{/account/change_information}" 
                     th:object="${accountForm}" method="POST">
                     <div class="mb-3 form-outline">
                       <input id="username" type="text" th:field="*{newUsername}" 
@@ -140,17 +139,25 @@
                       <div>
                         <ul id="username-error" class="list-unstyled hidden">
                           <li class="text-danger">
-                            New username cannot be empty!
+                            Please enter new username!
                           </li>
                         </ul>
                       </div>
                     </div>
                     <div class="mb-3 form-outline">
-                      <input type="text" th:field="*{oldPassword}" 
+                      <input id="information-password" type="password" th:field="*{oldPassword}" 
                         class="form-control form-control-lg" placeholder="Password to confirm"/>
+                      <div>
+                        <ul id="information-password-error" class="list-unstyled hidden">
+                          <li class="text-danger">
+                            Please enter password!
+                          </li>
+                        </ul>
+                      </div>
                     </div>
                     <button class="btn btn-primary" type="button" 
-                      th:onclick="|validateForm('username', 'usernmae-error', 'information-form')|">
+                      th:onclick="|validateEmailForm(['username', 'information-password'], [false, false],
+                      ['username-error', 'information-password-error'], 'information-form')|">
                       Change
                     </button>
                   </form>
