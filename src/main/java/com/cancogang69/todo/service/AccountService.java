@@ -57,19 +57,20 @@ public class AccountService {
     return true;
   }
 
-  public ChangeCode updateEmail(String email, String password, String update_email) {
-    Optional<Account> someone = this.findByEmail(update_email);
+  public ChangeCode updateEmail(String email, AccountForm form) {
+    Optional<Account> someone = this.findByEmail(form.getNewEmail());
     if(someone.isPresent()) {
       return ChangeCode.EMAIL_BEEN_USED;
     } 
 
-    Optional<Account> existing_user = this.findByEmailAndPassword(email, password);
+    Optional<Account> existing_user = 
+      this.findByEmailAndPassword(email, form.getOldPassword());
     if(existing_user.isEmpty()) {
       return ChangeCode.WRONG_PASSWORD;
     }
 
     Account update_user = existing_user.get();
-    update_user.setEmail(update_email);
+    update_user.setEmail(form.getNewEmail());
     userRepo.save(update_user);
     return ChangeCode.SUCCESSFUL;
   }

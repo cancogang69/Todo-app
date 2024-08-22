@@ -17,12 +17,19 @@
             <div class="card-body p-5 text-center">
               <div class="mb-md-5 mt-md-4 pb-5">
                 <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
-                <div th:if="${param.logout}" class="text-success">
+                <div th:if="${param.logout}" class="text-success mb-2">
                   You have been log out
                 </div>
-                <div th:if="${param.create_successfully}" class="text-success">
+                <div th:if="${param.create_successfully}" class="text-success mb-2">
                   Your account create successfully! Please login to continue!
                 </div>
+                <div th:if="${param.email_change_successfully}" class="text-success mb-2">
+                  Change email successfully! Please login to continue!
+                </div>
+                <div th:if="${param.password_change_successfully}" class="text-success mb-2">
+                  Change password successfully! Please login to continue!
+                </div>
+
                 <form th:action="@{/login}" method="POST">
                   <div data-mdb-input-init class="mb-3 form-outline">
                     <input type="email" name="email" class="form-control form-control-lg" placeholder="Email"/>

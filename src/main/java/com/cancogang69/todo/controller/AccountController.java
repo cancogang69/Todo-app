@@ -16,6 +16,7 @@ import com.cancogang69.todo.form.AccountForm;
 import com.cancogang69.todo.form.RegisterForm;
 import com.cancogang69.todo.service.AccountService;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 import java.util.Optional;
@@ -90,9 +91,8 @@ public class AccountController {
 
   @PostMapping(path = "/account/change_email")
   @PreAuthorize("isAuthenticated()")
-  public String changeEmail(AccountForm accountForm) {
-    ChangeCode status = accountService.updateEmail(getLoggedInEmail(), 
-      accountForm.getOldPassword(), accountForm.getNewEmail());
+  public String changeEmail(HttpSession session,AccountForm accountForm) {
+    ChangeCode status = accountService.updateEmail(getLoggedInEmail(), accountForm);
     
     switch (status) {
       case ChangeCode.EMAIL_BEEN_USED:
@@ -100,20 +100,22 @@ public class AccountController {
       case ChangeCode.WRONG_PASSWORD:
         return "redirect:/account?email_form_wrong_password";
       default:
-        return "redirect:/account?email_change_successfully";
+        session.invalidate();
+        return "redirect:/login?email_change_successfully";
     }
   }
 
   @PostMapping(path = "/account/change_password")
   @PreAuthorize("isAuthenticated()")
-  public String changePassword(AccountForm accountForm) {
+  public String changePassword(HttpSession session, AccountForm accountForm) {
     ChangeCode status = accountService.updatePassword(getLoggedInEmail(), accountForm);
     
     switch (status) {
       case ChangeCode.WRONG_PASSWORD:
         return "redirect:/account?wrong_old_password";
       default:
-        return "redirect:/account?password_change_successfully";
+        session.invalidate();
+        return "redirect:/login?password_change_successfully";
     }
   }
 }
