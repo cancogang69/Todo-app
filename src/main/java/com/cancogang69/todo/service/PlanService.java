@@ -63,4 +63,12 @@ public class PlanService {
     planRepo.delete(existing_plan);
       return true;
   }
+
+  public boolean deleteAllAccountPlan(Integer ownerId) {
+    List<Plan> plans = this.findByOwnerId(ownerId);
+    for(int i=0; i<plans.size(); i++)
+      this.deletePlan(plans.get(i).getId());
+    
+    return true;
+  }
 }

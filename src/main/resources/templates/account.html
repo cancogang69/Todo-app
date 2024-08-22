@@ -230,28 +230,26 @@
                   </form>
                 </div>
               </div>
-
               <div id="delete-pane" class="card tab-pane fade" role="tabpanel" 
                 aria-labelledby="delete-tab">
                 <div class="card-body">
                   <form id="delete-form" th:action="@{/account/delete}" 
                     th:object="${accountForm}" method="POST">
                     <div class="mb-3 form-outline">
-                      <input id="delete-form-old-password" type="text" th:field="*{oldPassword}" 
+                      <input id="delete-password" type="password" th:field="*{oldPassword}" 
                         class="form-control form-control-lg" placeholder="Password"/>
                       <div>
-                        <ul id="password-error" class="list-unstyled hidden">
+                        <ul id="delete-password-error" class="list-unstyled hidden">
                           <li class="text-danger">
                             Please enter your password
                           </li>
                         </ul>
                       </div>
                     </div>
-                    <button type="submit" class="btn btn-danger"
-                      th:data-confirm-delete="|Are you sure you want to delete your account?\n
-                        This process cannot be undone!|"
-                      onclick="return confirm(this.getAttribute('data-confirm-delete'))"
-                      >
+                    <button id="delete-button" type="button" class="btn btn-danger"
+                      th:data-confirm-delete="|Are you sure you want to delete your account? This process cannot be undone!|"
+                      th:onclick="|validateDeleteForm('delete-button', ['delete-password'], [false],
+                        ['delete-password-error'], 'delete-form')|">
                       Delete account
                     </button>
                   </form>
@@ -293,7 +291,7 @@
       errorElement.style.height = "0px";
     }
 
-    function validateForm(inputs, isEmails, errorIds ,formId) {
+    function validateForm(inputs, isEmails, errorIds, formId) {
       var errorFlag = false;
       for(var i=0; i<inputs.length; i++) {
         var elementValue = document.getElementById(inputs[i]).value;
@@ -312,6 +310,16 @@
 
       var form = document.getElementById(formId);
       form.submit();
+    }
+
+    function validateDeleteForm(buttonId, inputs, isEmails, errorIds, formId) {
+      var deleteButton = document.getElementById("delete-button");
+      var isConfirm = confirm(deleteButton.getAttribute('data-confirm-delete'));
+      if(!isConfirm) {
+        return;
+      }
+
+      validateForm(inputs, isEmails, errorIds, formId);
     }
   </script>
 </html>

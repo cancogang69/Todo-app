@@ -21,6 +21,9 @@ public class AccountService {
   @Autowired
   private PasswordEncoder passwordEncoder;
 
+  @Autowired
+  private PlanService planService;
+
   public List<Account> findAll() {
     return this.userRepo.findAll();
   }
@@ -100,10 +103,13 @@ public class AccountService {
     return ChangeCode.SUCCESSFUL;
   }
 
-  public boolean deleteUser(Integer user_id, Account user) {
-    Optional<Account> existing_user = this.findById(user_id);
+  public ChangeCode deleteAccount(String email, String password) {
+    Optional<Account> existing_user = this.findByEmailAndPassword(email, password);
+    if(existing_user.isEmpty()) {
+      return ChangeCode.WRONG_PASSWORD;
+    }
 
-    this.userRepo.deleteById(user_id);
-    return true;
+    planService.deleteAllAccountPlan(existing_user.get().getId());
+    return ChangeCode.SUCCESSFUL;
   }
 }

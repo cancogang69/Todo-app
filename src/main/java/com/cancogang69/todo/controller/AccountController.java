@@ -118,4 +118,18 @@ public class AccountController {
         return "redirect:/login?password_change_successfully";
     }
   }
+
+  @PostMapping(path = "/account/delete")
+  @PreAuthorize("isAuthenticated()")
+  public String deleteAccount(HttpSession session, AccountForm accountForm) {
+    ChangeCode status = accountService.deleteAccount(getLoggedInEmail(), accountForm.getOldPassword());
+    
+    switch (status) {
+      case ChangeCode.WRONG_PASSWORD:
+        return "redirect:/account?delete_wrong_password";
+      default:
+        session.invalidate();
+        return "redirect:/login?delete_successfully";
+    }
+  }
 }

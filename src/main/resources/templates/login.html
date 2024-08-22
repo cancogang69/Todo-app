@@ -29,6 +29,9 @@
                 <div th:if="${param.password_change_successfully}" class="text-success mb-2">
                   Change password successfully! Please login to continue!
                 </div>
+                <div th:if="${param.delete_successfully}" class="text-success mb-2">
+                  Your account was deleted! Thank you for using My todo! Have a nice day!
+                </div>
 
                 <form th:action="@{/login}" method="POST">
                   <div data-mdb-input-init class="mb-3 form-outline">
